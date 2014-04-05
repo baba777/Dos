@@ -18,7 +18,7 @@ public class CardObject : MonoBehaviour
 
 	public void ChangeCard(Card newCard)
 	{
-		switch (newCard.CardColor)
+		switch (newCard.color)
 		{
 		case Card.UnoColor.Red:
 			renderer.material.color = Color.red;

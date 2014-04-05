@@ -35,7 +35,8 @@ public class Card
 
 	public bool Playable()
 	{
-		Card topDiscard = GameMaster.getTopDiscard();
+		var gameMaster = GameObject.Find("GameMaster").GetComponent<GameMaster>();
+		Card topDiscard = gameMaster.getTopDiscard();
 		return this.color == topDiscard.color || this.value == topDiscard.value || this.color == UnoColor.Wild;
 	}
 }
