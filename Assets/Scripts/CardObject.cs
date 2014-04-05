@@ -4,7 +4,6 @@ using System.Collections;
 public class CardObject : MonoBehaviour 
 {
 	public Card card;
-	public const int POWER = 200;
 
 	// Use this for initialization
 	void Start()

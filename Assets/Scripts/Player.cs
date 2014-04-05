@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
 	{
 		Camera.main.transform.position = transform.position;
 	}
-	
+
 	// Update is called once per frame
 	void Update() 
 	{
