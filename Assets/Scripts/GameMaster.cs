@@ -6,6 +6,10 @@ public class GameMaster : MonoBehaviour
 {
 	private List<Card> _deck;
 	private List<Card> _discarded;
+	public static bool reverse;
+	public static bool skip;
+	public static bool drawTwo;
+	public static bool drawFour;
 
 	// Use this for initialization
 	void Start()
@@ -17,5 +21,10 @@ public class GameMaster : MonoBehaviour
 	void Update()
 	{
 		
+	}
+
+	public Card getTopDiscard()
+	{
+		return _discarded.FindLast();
 	}
 }
