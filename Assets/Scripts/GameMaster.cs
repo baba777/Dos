@@ -1,14 +1,12 @@
 ﻿using UnityEngine;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 public class GameMaster : MonoBehaviour
 {
-	public static bool reverse;
-	public static bool skip;
-	public static bool drawTwo;
-	public static bool drawFour;
+	public GameObject PlayerObject;
 
 	public List<Card> deck
 	{
@@ -20,28 +18,22 @@ public class GameMaster : MonoBehaviour
 		get; private set;
 	}
 
+	private bool _clockwise;
+
+	public List<Player> players;
+
 	// Use this for initialization
 	void Start()
 	{
 		deck = new List<Card>();
 		discarded = new List<Card>();
 
+		AddPlayer();
+		AddPlayer();
+
 		fillDeck();
 		shuffle();
-
-		// See if it's working
-		foreach (var card in deck)
-		{
-			var name = Enum.GetName(typeof(Card.UnoColor), card.color) + " " +
-					   Enum.GetName(typeof(Card.UnoValue), card.value);
-			print(name);
-		}
-	}
-
-	// Update is called once per frame
-	void Update()
-	{
-		
+		distribute();
 	}
 
 	/// <summary>
@@ -49,23 +41,23 @@ public class GameMaster : MonoBehaviour
 	/// </summary>
 	private void fillDeck()
 	{
+		// Colors Red, Green, Blue, and Yellow
 		var colors = ((Card.UnoColor[]) Enum.GetValues(typeof(Card.UnoColor))).Take(4);
-		var numbers = (Card.UnoValue[]) Enum.GetValues(typeof(Card.UnoValue));
-		
-		var doubledCardNumbers = numbers.Skip(1).Take(12);
+		// Numbers 1-9 and symbols
+		var numbers = ((Card.UnoValue[]) Enum.GetValues(typeof(Card.UnoValue))).Skip(1).Take(12);
 		
 		// Create 0-9 and symbol cards for each color
 		foreach (var color in colors)
 		{
 			deck.Add(new Card(color, Card.UnoValue.Zero));
 			
-			foreach (var number in doubledCardNumbers)
+			foreach (var number in numbers)
 			{
 				deck.Add(new Card(color, number));
 				deck.Add(new Card(color, number));
 			}
 		}
-		
+
 		// Create Wild cards
 		for (var i = 0; i < 4; i++)
 		{
@@ -90,7 +82,53 @@ public class GameMaster : MonoBehaviour
 		}
 	}
 
-	public Card getTopDiscard()
+	private void distribute()
+	{
+		for(int i = 0; i < 7; i++)
+		{
+			foreach(var player in players)
+			{
+				player.addToHand(PopDeck());
+			}
+		}
+	}
+
+	public void AddPlayer()
+	{
+		var playerObject = (GameObject)GameObject.Instantiate(PlayerObject);
+		var player = playerObject.GetComponent<Player>();
+
+		players.Add(player);
+	}
+
+	public void PlayCard(Card card)
+	{
+		switch(card.value)
+		{
+		case Card.UnoValue.Skip:
+			//GameMaster.skip = true;
+			break;
+		case Card.UnoValue.Reverse:
+			//GameMaster.reverse = !GameMaster.reverse;
+			break;
+		case Card.UnoValue.DrawTwo:
+			//GameMaster.drawTwo = true;
+			break;
+		case Card.UnoValue.DrawFour:
+			//GameMaster.drawFour = true;
+			break;
+		}
+	}
+	
+	public Card PopDeck()
+	{
+		var temp = deck.Last();
+		deck.RemoveAt(deck.Count - 1);
+
+		return temp;
+	}
+
+	public Card PeekDiscard()
 	{
 		return discarded.Last();
 	}

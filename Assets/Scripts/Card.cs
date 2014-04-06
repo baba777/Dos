@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 public class Card
@@ -14,29 +15,19 @@ public class Card
 		this.value = value;
 	}
 
-	public void Action()
+	public string GetName()
 	{
-		switch(this.value)
-		{
-			case UnoValue.Skip:
-				GameMaster.skip = true;
-				break;
-			case UnoValue.Reverse:
-				GameMaster.reverse = !GameMaster.reverse;
-				break;
-			case UnoValue.DrawTwo:
-				GameMaster.drawTwo = true;
-				break;
-			case UnoValue.DrawFour:
-				GameMaster.drawFour = true;
-				break;
-		}
+		return Enum.GetName(typeof(Card.UnoColor), color) + " " +
+			   Enum.GetName(typeof(Card.UnoValue), value);
 	}
-
+	
 	public bool Playable()
 	{
-		var gameMaster = GameObject.Find("GameMaster").GetComponent<GameMaster>();
-		Card topDiscard = gameMaster.getTopDiscard();
-		return this.color == topDiscard.color || this.value == topDiscard.value || this.color == UnoColor.Wild;
+		var gameMaster = GameObject.Find("Deck").GetComponent<GameMaster>();
+		Card topDiscard = gameMaster.PeekDiscard();
+
+		return this.color == topDiscard.color ||
+			   this.value == topDiscard.value ||
+			   this.color == UnoColor.Wild;
 	}
 }

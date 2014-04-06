@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -6,6 +7,7 @@ public class Player : MonoBehaviour
 {
 	public const int FORCE = 500;
 	private List<Card> _hand;
+	private GameMaster _gameMaster;
 
 	// Use this for initialization
 	void Start() 
@@ -28,6 +30,32 @@ public class Player : MonoBehaviour
 				if (card != null)
 				{
 					card.Flick(mouseRay.direction, hit.point, FORCE);
+				}
+			}
+		}
+	}
+
+	public void addToHand(Card card)
+	{
+		if (_hand == null)
+		{
+			_hand = new List<Card>();
+		}
+
+		_hand.Add(card);
+	}
+
+	void OnGUI()
+	{
+		GUILayout.BeginHorizontal();
+
+		if (_hand != null)
+		{
+			foreach (var card in _hand)
+			{
+				if (GUILayout.Button(card.GetName()))
+				{
+
 				}
 			}
 		}
